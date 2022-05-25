@@ -19,39 +19,10 @@ public class StartupChecks
 
     public void EnsureConfigurationValues()
     {
-        EnsureJwtParameters(configuration.GetSection("Jwt"));
-
         var databaseType = configuration[ConfigurationConstants.DATABASE_TYPE];
         EnsureDatabaseType(databaseType);
 
         EnsureConnectionString(configuration[ConfigurationConstants.DEFAULT_CONNECTION_STRING], databaseType);
-    }
-
-    /// <summary>
-    ///     Ensures the JWT parameters are present.
-    /// </summary>
-    /// <param name="jwtSection"></param>
-    /// <exception cref="InvalidOrMissingConfigurationException"></exception>
-    private static void EnsureJwtParameters(IConfigurationSection jwtSection)
-    {
-        if (jwtSection == null) throw new ArgumentNullException(nameof(jwtSection));
-        var section = jwtSection.Get<JwtOptions>();
-        
-        if (string.IsNullOrEmpty(section.Authority))
-            throw new InvalidOrMissingConfigurationException<string>($"JWT {nameof(JwtOptions.Authority)}", section.Authority,
-                InvalidOrMissingConfigurationReason.Missing);
-        if (string.IsNullOrEmpty(section.Audience))
-            throw new InvalidOrMissingConfigurationException<string>($"JWT {nameof(JwtOptions.Audience)}", section.Audience,
-                InvalidOrMissingConfigurationReason.Missing);
-        if (string.IsNullOrEmpty(section.Issuer))
-            throw new InvalidOrMissingConfigurationException<string>($"JWT {nameof(JwtOptions.Issuer)}", section.Issuer,
-                InvalidOrMissingConfigurationReason.Missing);
-
-        if (section.EnableRoleBasedAuthorization && (string.IsNullOrEmpty(section.RoleKey) || string.IsNullOrEmpty(section.RoleValue)))
-        {
-            throw new InvalidOrMissingConfigurationException<string>($"JWT {nameof(JwtOptions.RoleKey)}", section.RoleKey,
-                InvalidOrMissingConfigurationReason.Missing);
-        }
     }
 
     /// <summary>
