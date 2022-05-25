@@ -48,14 +48,12 @@ public class Program
     public static IHostBuilder CreateHostBuilder(string[] args)
     {
         return Host.CreateDefaultBuilder(args)
+            .UseSerilog()
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>()
-                    .CaptureStartupErrors(true)
-                    .UseSerilog((hostingContext, loggerConfiguration) =>
-                    {
-                        loggerConfiguration.ConfigureLogging(hostingContext);
-                    });
+                webBuilder
+                    .UseStartup<Startup>()
+                    .CaptureStartupErrors(true);
             });
     }
 
@@ -65,7 +63,7 @@ public class Program
     private static void EnsureLogger()
     {
         // Log.Logger will likely be internal type "Serilog.Core.Pipeline.SilentLogger".
-        if (Log.Logger == null || Log.Logger.GetType().Name == "SilentLogger")
+        if (Log.Logger.GetType().Name == "SilentLogger")
             // Loading configuration or Serilog failed.
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
