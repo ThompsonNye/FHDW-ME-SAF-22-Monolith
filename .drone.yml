@@ -1,0 +1,44 @@
+kind: pipeline
+type: docker
+name: default
+
+trigger:
+  event:
+  - pull_request
+
+steps:
+- name: tests
+  image: plugins/docker
+  environment:
+    ASPNETCORE_URLS: 
+    DOTNET_GENERATE_ASPNET_CERTIFICATE: false
+    DOTNET_NOLOGO: true
+    DOTNET_SDK_VERSION: 6.0.200
+    DOTNET_SYSTEM_GLOBALIZATION_INVARIANT: false
+    DOTNET_USE_POLLING_FILE_WATCHER: true
+    Logging__Console__FormatterName: 
+    NUGET_XMLDOC_MODE: skip
+    POWERSHELL_DISTRIBUTION_CHANNEL: PSDocker-DotnetSDK-Alpine-3.14-arm64
+  commands:
+  - apk add --no-cache curl icu-libs git
+  - RUN wget -O dotnet.tar.gz https://dotnetcli.azureedge.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-sdk-$DOTNET_SDK_VERSION-linux-musl-arm64.tar.gz && dotnet_sha512='395d1432f32c8c471614d0651bbe761160d5b559ba7e93167b914a8e1ea9f5c699feeaeb817b29cb0123c498000f2e40901679eee6dc91694645ff19d67a2b8f' && echo "$dotnet_sha512  dotnet.tar.gz" | sha512sum -c - && mkdir -p /usr/share/dotnet && tar -oxzf dotnet.tar.gz -C /usr/share/dotnet ./packs ./sdk ./sdk-manifests ./templates ./LICENSE.txt ./ThirdPartyNotices.txt && rm dotnet.tar.gz && dotnet help
+  - dotnet test
+  when:
+    branch:
+    - master
+    - develop
+
+- name: build
+  image: plugins/docker
+  settings:
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+    repo: docker.nuyken.dev/vegasco-server
+    registry: docker.nuyken.dev
+  when:
+    branch:
+    - master
+    - develop
+  

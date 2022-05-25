@@ -1,0 +1,27 @@
+**/.classpath
+**/.dockerignore
+**/.env
+# Nerdbank.GitVersioning needs the .git folder during build to determine the version based on the git information like commit id
+# Since only the output of dotnet publish is copied into the final the final layer, the .git folder is not included in the final image
+# **/.git
+**/.gitignore
+**/.project
+**/.settings
+**/.toolstarget
+**/.vs
+**/.vscode
+**/*.*proj.user
+**/*.dbmdl
+**/*.jfm
+**/azds.yaml
+**/bin
+**/charts
+**/docker-compose*
+**/Dockerfile*
+**/node_modules
+**/npm-debug.log
+**/obj
+**/secrets.dev.yaml
+**/values.dev.yaml
+LICENSE
+README.md
