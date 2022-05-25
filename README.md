@@ -1,12 +1,9 @@
 # FHDW-ME-SAF-22-Monolith
 Monolithische Anwendung zur Studienarbeit in SAF im Sommersemester '22 an der FHDW Mettmann.
 
-# Vehicle Gas Consumption Server
+## Vehicle Gas Consumption Server (Vegasco)
 
-The backend for
-the [Vehicle Gas Consumption App V2](https://git.nuyken.dev/thomas.nuyken/vehicle-gas-consumption-app-v2).
-
-## Configuration options
+### Configuration options
 
 | Option                            | Type   | Description                                                                                                                                                                                                                                                                                         | Required                                            | Default value                                |
 |-----------------------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------------------|
@@ -19,18 +16,18 @@ the [Vehicle Gas Consumption App V2](https://git.nuyken.dev/thomas.nuyken/vehicl
 
 ___Note the double underscore as separator___ _(not in CONNECTION_STRING)____!___
 
-## Logging
+### Logging
 
-## Migrations
+### Migrations
 
-### Working with migrations
+#### Working with migrations
 
 - Add-Migration
 - Remove-Migration
 - Update-Database
 - --> link to migrations in Microsoft docs
 
-### Add new migrations
+#### Add new migrations
 
 When adding a new migration, the connection string and the db type have to be set, e.g. ___temporarily___ set them
 in `appsetting.json`:
@@ -46,12 +43,12 @@ in `appsetting.json`:
 }
 ```
 
-### Auto apply on startup
+#### Auto apply on startup
 
 If the configuration option `DATABASE__AUTOMIGRATE` is set to `true`, the available migrations are applied to the
 database during startup.
 
-## Docker
+### Docker
 
 ```yaml
 version: '3.8'
@@ -66,7 +63,7 @@ volumes:
 services:
   vegasco-db:
     container_name: vegasco-db
-    image: mariadb:10.5.11-focal
+    image: mariadb:10.7.4-focal
     environment:
       MYSQL_DATABASE: vegasco
       MYSQL_USER: vegasco
