@@ -93,6 +93,8 @@ public class Startup
     {
         app.UseOpenApi();
         if (publishUi)
-            app.UseSwaggerUi3(c => { c.EnableTryItOut = false; });
+        {
+            app.UseSwaggerUi3();
+        }
     }
 }
