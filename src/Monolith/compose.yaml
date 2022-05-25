@@ -10,14 +10,10 @@ volumes:
 services:
   app:
     container_name: vegasco-dev-app
-    restart: unless-stopped
     build: .
+    restart: unless-stopped
     environment:
       CONNECTION_STRING: "Server=vegasco-dev-db;port=3306;Database=vegasco;User=vegasco;Password=rootPassword;"
-      JWT__AUTHORITY: https://login.example.com/auth/
-      JWT__ISSUER: https://login.example.com/auth/
-      JWT__AUDIENCE: audience
-      JWT__ENABLEROLEBASEDAUTHORIZATION: "false"
       DATABASE__AUTOMIGRATE: "true"
       DATABASE__TYPE: "mariadb"
       SWAGGER__PUBLISHSWAGGERUI: "true"

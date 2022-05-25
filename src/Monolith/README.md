@@ -5,22 +5,16 @@ the [Vehicle Gas Consumption App V2](https://git.nuyken.dev/thomas.nuyken/vehicl
 
 ## Configuration options
 
-Option | Type | Description | Required |  Default value
---- | --- | --- | --- | ---
-CONNECTION_STRING | string | The connection string to the database to use. | If DATABASE_TYPE is not null, yes | null
-DATABASE__AUTOMIGRATE | bool | Whether or not to automatically apply the available EF migrations on startup. | No | false
-DATABASE__TYPE | string | What database type is used. Allowed values: null, mysql, mariadb. If null, an in-memory database is used. In case of mysql or mariadb, an appropriate database has to be set up (e.g. via another docker container in the docker-compose) and the connection string provided via CONNECTION_STRING. | No | null
-JWT__AUDIENCE | string | The valid audience for validatin JWTs. | Yes | null
-JWT__AUTHORITY | string | The valid authority for validating JWTs. | Yes | null
-JWT__ISSUER | string | The valid issuer for validating JWTs. | Yes | null
-JWT__ENABLEROLEBASEDAUTHORIZATION | bool | Whether to check for a specific role during authorization. | No | true
-JWT__ROLEKEY | string | The role key to check for if role based authorization is enabled. | If JWT__ENABLEROLEBASEDAUTHORIZATION not false, yes | null
-JWT__ROLEVALUE | string | The role value to check for if role based authorization is enabled. | If JWT__ENABLEROLEBASEDAUTHORIZATION not false, yes | null
-SWAGGER__DESCRIPTION | string | The description in the swagger document. | No | Backend for the Vehicle Gas Consumption App.
-SWAGGER__TITLE | string | The title of the swagger document. | No | Vehicle Cas Consumption
-SWAGGER__PUBLISHSWAGGERUI | bool | Whether to publish the Swagger UI besides the swagger.json file | No | false
+| Option                            | Type   | Description                                                                                                                                                                                                                                                                                         | Required                                            | Default value                                |
+|-----------------------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------------------|
+| CONNECTION_STRING                 | string | The connection string to the database to use.                                                                                                                                                                                                                                                       | If DATABASE_TYPE is not null, yes                   | null                                         |
+| DATABASE__AUTOMIGRATE             | bool   | Whether or not to automatically apply the available EF migrations on startup.                                                                                                                                                                                                                       | No                                                  | false                                        |
+| DATABASE__TYPE                    | string | What database type is used. Allowed values: null, mysql, mariadb. If null, an in-memory database is used. In case of mysql or mariadb, an appropriate database has to be set up (e.g. via another docker container in the docker-compose) and the connection string provided via CONNECTION_STRING. | No                                                  | null                                         |
+| SWAGGER__DESCRIPTION              | string | The description in the swagger document.                                                                                                                                                                                                                                                            | No                                                  | Backend for the Vehicle Gas Consumption App. |
+| SWAGGER__TITLE                    | string | The title of the swagger document.                                                                                                                                                                                                                                                                  | No                                                  | Vehicle Cas Consumption                      |
+| SWAGGER__PUBLISHSWAGGERUI         | bool   | Whether to publish the Swagger UI besides the swagger.json file                                                                                                                                                                                                                                     | No                                                  | false                                        |
 
-___Note the double underscore as seperator___ _(not in CONNECTION_STRING)____!___
+___Note the double underscore as separator___ _(not in CONNECTION_STRING)____!___
 
 ## Logging
 
@@ -90,12 +84,6 @@ services:
         image: vegasco-server
         environment: 
             CONNECTION_STRING: <connection string>
-            JWT__AUTHORITY: <authority>
-            JWT__ISSUER: <issuer>
-            JWT__AUDIENCE: <audience>
-            JWT__ENABLEROLEBASEDAUTHORIZATION: "true"
-            JWT__ROLEKEY: <role-key>
-            JWT__ROLEVALUE: <role-value>
             DATABASE__AUTOMIGRATE: "true"
             DATABASE__TYPE: mariadb
             SWAGGER__TITLE: "Fancy title"
