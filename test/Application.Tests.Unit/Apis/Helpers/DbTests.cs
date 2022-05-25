@@ -35,7 +35,6 @@ public abstract class DbTests : IDisposable
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
-        context.Users.AddRange(MockObjectsProvider.GetUsers());
         context.SaveChanges();
         context.Cars.AddRange(MockObjectsProvider.GetCars());
         context.SaveChanges();

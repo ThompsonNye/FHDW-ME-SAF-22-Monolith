@@ -24,10 +24,9 @@ public class GetCarsTests : DbTests
     public void TestHandler(int expectedCount)
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessor = MockObjectsProvider.GetUserAccessMock().Object;
 
         var query = new GetCarsQuery();
-        var handler = new GetCarsQueryHandler(dbContext, userAccessor);
+        var handler = new GetCarsQueryHandler(dbContext);
 
         var task = handler.Handle(query, CancellationToken.None);
         task.Wait();

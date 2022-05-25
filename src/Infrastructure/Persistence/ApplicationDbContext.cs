@@ -17,10 +17,6 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<Car> Cars { get; set; }
 
-    public DbSet<User> Users { get; set; }
-
-    public DbSet<Setting> Settings { get; set; }
-
 
     public void EnsureDateTimeKindUTC(ModelBuilder builder)
     {
@@ -48,22 +44,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-
-        builder.Entity<Consumption>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.Consumptions)
-            .HasForeignKey(x => x.UserId);
-
-        builder.Entity<Car>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.Cars)
-            .HasForeignKey(x => x.UserId);
-
-        builder.Entity<Setting>()
-            .HasOne(x => x.User)
-            .WithMany(x => x.Settings)
-            .HasForeignKey(x => x.UserId);
-
+        
         EnsureDateTimeKindUTC(builder);
     }
 }

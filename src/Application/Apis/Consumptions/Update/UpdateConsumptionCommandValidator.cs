@@ -3,7 +3,6 @@ using System.Linq;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Nuyken.VeGasCo.Backend.Application.Common.Abstractions;
-using Nuyken.VeGasCo.Backend.Domain.Common.Abstractions;
 
 namespace Nuyken.VeGasCo.Backend.Application.Apis.Consumptions.Update;
 
@@ -11,15 +10,13 @@ public class UpdateConsumptionCommandValidator : AbstractValidator<UpdateConsump
 {
     private readonly IActionContextAccessor actionContextAccessor;
     private readonly IApplicationDbContext dbContext;
-    private readonly IUserAccessor userAccessor;
 
     public UpdateConsumptionCommandValidator(IActionContextAccessor actionContextAccessor,
-        IApplicationDbContext dbContext, IUserAccessor userAccessor)
+        IApplicationDbContext dbContext)
     {
         this.actionContextAccessor =
             actionContextAccessor ?? throw new ArgumentNullException(nameof(actionContextAccessor));
         this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
-        this.userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
 
         RuleFor(x => x.Id)
             .Cascade(CascadeMode.Stop)
@@ -35,9 +32,6 @@ public class UpdateConsumptionCommandValidator : AbstractValidator<UpdateConsump
         RuleFor(x => x.DateTime)
             .Must(NotBeInFutureIfProvided).WithName(nameof(DateTime))
             .WithMessage("{PropertyName} cannot be in the future");
-
-        RuleFor(x => x.CarId)
-            .Must(BeOwnedByUserIfProvided).WithMessage("{PropertyName} cannot be found for the user");
     }
 
     protected bool MatchRouteValue(Guid id)
@@ -59,14 +53,5 @@ public class UpdateConsumptionCommandValidator : AbstractValidator<UpdateConsump
         if (!dateTime.HasValue) return true;
 
         return dateTime.Value.ToUniversalTime() <= DateTime.UtcNow;
-    }
-
-    protected bool BeOwnedByUserIfProvided(Guid? carId)
-    {
-        if (carId == default) return true;
-
-        var car = dbContext.Cars.FirstOrDefault(x => x.Id == carId);
-        var userId = userAccessor.UserId;
-        return car is not null && car.UserId == userId;
     }
 }

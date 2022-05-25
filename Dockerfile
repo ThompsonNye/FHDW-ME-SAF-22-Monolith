@@ -9,8 +9,9 @@ RUN apk --no-cache add curl
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0-alpine AS publish
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
+WORKDIR /src
 COPY . .
-WORKDIR /src/WebApi
+WORKDIR /src/src/WebApi
 RUN dotnet publish "WebApi.csproj" -c Release -o /app/publish
 
 FROM health_prep AS final

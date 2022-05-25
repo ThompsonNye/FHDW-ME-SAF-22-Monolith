@@ -11,11 +11,6 @@ public interface IApplicationDbContext
 
     DbSet<Car> Cars { get; set; }
 
-    DbSet<User> Users { get; set; }
-
-    DbSet<Setting> Settings { get; set; }
-
-
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 
     void EnsureDateTimeKindUTC(ModelBuilder builder);

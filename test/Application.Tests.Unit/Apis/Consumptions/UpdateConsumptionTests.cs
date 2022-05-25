@@ -71,13 +71,12 @@ public class UpdateConsumptionTests : DbTests
         double amount, string carId, string dateTime)
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessor = MockObjectsProvider.GetUserAccessMock().Object;
         var routeData = new Dictionary<string, string>
         {
             {"id", idInRoute}
         };
         var actionContextAccessor = MockObjectsProvider.GetActionContextAccessor(routeData).Object;
-        var validator = new UpdateConsumptionCommandValidator(actionContextAccessor, dbContext, userAccessor);
+        var validator = new UpdateConsumptionCommandValidator(actionContextAccessor, dbContext);
         var command = new UpdateConsumptionCommand
         {
             Id = Guid.Parse(id),

@@ -11,9 +11,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Nuyken.VeGasCo.Backend.Application.Apis.Cars.Create;
-using Nuyken.VeGasCo.Backend.Application.Apis.Users.Create;
 using Nuyken.VeGasCo.Backend.Application.Common.Abstractions;
-using Nuyken.VeGasCo.Backend.Domain.Common.Abstractions;
 using Nuyken.VeGasCo.Backend.Domain.Common.Exceptions;
 using Nuyken.VeGasCo.Backend.Domain.Entities.Common;
 using Shouldly;
@@ -29,12 +27,10 @@ public class CreateCarCommandHandlerTests
     private readonly ILogger<CreateCarCommandHandler> _logger = new NullLogger<CreateCarCommandHandler>();
     private readonly IMediator _mediator = Substitute.For<IMediator>();
     private readonly CreateCarCommandHandler _sut;
-    private readonly IUserAccessor _userAccessor = Substitute.For<IUserAccessor>();
-    private readonly DbSet<User> _users = Substitute.For<DbSet<User>, IQueryable<User>>();
 
     public CreateCarCommandHandlerTests()
     {
-        _sut = new CreateCarCommandHandler(_dbContext, _userAccessor, _logger, _mediator);
+        _sut = new CreateCarCommandHandler(_dbContext, _logger, _mediator);
         _fixture.Behaviors.Remove(new ThrowingRecursionBehavior());
         _fixture.Behaviors.Add(new OmitOnRecursionBehavior());
     }
@@ -45,7 +41,6 @@ public class CreateCarCommandHandlerTests
         // Arrange
         var car = _fixture.Create<Car>();
         SetupCars(car);
-        SetupUser();
         _dbContext.Cars.Returns(_cars);
         var cancellationToken = new CancellationToken();
         _dbContext.SaveChangesAsync(cancellationToken).Returns(1);
@@ -59,7 +54,6 @@ public class CreateCarCommandHandlerTests
 
         // Assert
         result.Name.ShouldBe(command.Name);
-        result.UserId.ShouldBe(_userAccessor.UserId);
         _dbContext.Cars.ReceivedWithAnyArgs();
     }
 
@@ -68,7 +62,6 @@ public class CreateCarCommandHandlerTests
     {
         var car = _fixture.Create<Car>();
         SetupCars(car);
-        SetupUser();
         _dbContext.Cars.Returns(_cars);
         var cancellationToken = new CancellationToken();
         _dbContext.SaveChangesAsync(cancellationToken).Returns(0);
@@ -94,32 +87,5 @@ public class CreateCarCommandHandlerTests
         ((IQueryable<Car>) _cars).ElementType.Returns(cars.ElementType);
         ((IQueryable<Car>) _cars).GetEnumerator().Returns(cars.GetEnumerator());
         _cars.Add(car).ReturnsNull();
-    }
-
-    private void SetupUser()
-    {
-        var user = _fixture.Create<User>();
-        var users = new[]
-        {
-            user
-        }.AsQueryable();
-        ((IQueryable<User>) _users).Provider.Returns(users.Provider);
-        ((IQueryable<User>) _users).Expression.Returns(users.Expression);
-        ((IQueryable<User>) _users).ElementType.Returns(users.ElementType);
-        ((IQueryable<User>) _users).GetEnumerator().Returns(users.GetEnumerator());
-
-        _dbContext.Users.Returns(_users);
-
-        _userAccessor.UserId.Returns(user.Id);
-        _userAccessor.UserName.Returns(user.Username);
-
-        var createUserCommand = new CreateUserCommand
-        {
-            Id = user.Id,
-            Username = user.Username,
-            FirstName = user.FirstName,
-            LastName = user.LastName
-        };
-        _mediator.Send(createUserCommand).ReturnsNull();
     }
 }

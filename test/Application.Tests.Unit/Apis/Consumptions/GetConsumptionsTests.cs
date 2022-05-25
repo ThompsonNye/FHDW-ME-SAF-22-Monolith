@@ -27,11 +27,10 @@ public class GetConsumptionsTests : DbTests
     public void TestCarAndUsernameInConsumptionEntries()
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessor = MockObjectsProvider.GetUserAccessMock().Object;
 
         var query = new GetConsumptionsQuery();
 
-        var handler = new GetConsumptionsQueryHandler(dbContext, userAccessor);
+        var handler = new GetConsumptionsQueryHandler(dbContext);
         var task = handler.Handle(query, CancellationToken.None);
         task.Wait();
         var result = task.Result;
@@ -40,9 +39,7 @@ public class GetConsumptionsTests : DbTests
         foreach (var c in result)
         {
             Assert.NotNull(c.Car);
-            Assert.NotNull(c.User);
             Assert.False(string.IsNullOrEmpty(c.CarName));
-            Assert.False(string.IsNullOrEmpty(c.UserName));
         }
     }
 

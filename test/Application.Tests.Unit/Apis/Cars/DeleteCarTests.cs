@@ -65,14 +65,13 @@ public class DeleteCarTests : DbTests
     private void HandlerTestLogic(string id)
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessor = MockObjectsProvider.GetUserAccessMock().Object;
         var carId = Guid.Parse(id);
         var command = new DeleteCarCommand
         {
             Id = carId
         };
         var handler =
-            new DeleteCarCommandHandler(dbContext, userAccessor, new NullLogger<DeleteCarCommandHandler>());
+            new DeleteCarCommandHandler(dbContext, new NullLogger<DeleteCarCommandHandler>());
 
         var countBefore = dbContext.Cars.Count();
 

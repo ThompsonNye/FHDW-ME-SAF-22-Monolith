@@ -22,11 +22,4 @@ public class Consumption
     [JsonIgnore] public virtual Car Car { get; set; }
 
     public virtual string CarName => Car?.Name;
-
-
-    [ForeignKey(nameof(User))] public Guid UserId { get; set; }
-
-    [JsonIgnore] public virtual User User { get; set; }
-
-    public virtual string UserName => User?.Username;
 }

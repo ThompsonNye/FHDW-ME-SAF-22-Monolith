@@ -8,9 +8,6 @@ public static class TestDataProvider
     public const string CAR_ID = "24b4a92e-dcb5-42b8-aad8-5cb07b282a0a";
     public const string CAR_ID_OTHER_USER = "24b4a92e-dcb5-42b8-aad8-5cb07b282a0c";
 
-    public const string USER_ID = "5d4ac84a-711f-430b-b174-780f720b3f37";
-    public const string USER_ID_OTHER_USER = "5d4ac84a-711f-430b-b174-780f720b3f38";
-
     public const string GUID_DEFAULT = "00000000-0000-0000-0000-000000000000";
 
     public const string DATE_PAST = "2021-08-01T00:00:00Z";

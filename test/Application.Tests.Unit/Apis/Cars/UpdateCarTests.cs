@@ -64,9 +64,8 @@ public class UpdateCarTests : DbTests
     private void HandlerLogic(string id, string name)
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessor = MockObjectsProvider.GetUserAccessMock().Object;
         var handler =
-            new UpdateCarCommandHandler(dbContext, userAccessor, new NullLogger<UpdateCarCommandHandler>());
+            new UpdateCarCommandHandler(dbContext, new NullLogger<UpdateCarCommandHandler>());
 
         var command = new UpdateCarCommand
         {

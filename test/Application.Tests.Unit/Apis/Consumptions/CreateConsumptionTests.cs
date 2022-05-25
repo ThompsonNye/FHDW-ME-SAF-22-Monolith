@@ -61,8 +61,7 @@ public class CreateConsumptionTests : DbTests
         string dateTime)
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessMock = MockObjectsProvider.GetUserAccessMock();
-        var validator = new CreateConsumptionCommandValidator(userAccessMock.Object, dbContext);
+        var validator = new CreateConsumptionCommandValidator(dbContext);
 
         var command = new CreateConsumptionCommand
         {

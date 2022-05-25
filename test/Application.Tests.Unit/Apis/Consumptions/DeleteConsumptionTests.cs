@@ -28,7 +28,6 @@ public class DeleteConsumptionTests : DbTests
     public void TestValidation(bool expectedIsValid, string id)
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessor = MockObjectsProvider.GetUserAccessMock().Object;
         var validator = new DeleteConsumptionCommandValidator();
         var command = new DeleteConsumptionCommand
         {
@@ -59,10 +58,9 @@ public class DeleteConsumptionTests : DbTests
     private void HandlerTestLogic(string id)
     {
         using var dbContext = new ApplicationDbContext(options);
-        var userAccessor = MockObjectsProvider.GetUserAccessMock().Object;
 
         // Delete the entry with the specified id
-        var handler = new DeleteConsumptionCommandHandler(dbContext, userAccessor,
+        var handler = new DeleteConsumptionCommandHandler(dbContext, 
             new NullLogger<DeleteConsumptionCommandHandler>());
         var command = new DeleteConsumptionCommand
         {
@@ -74,7 +72,7 @@ public class DeleteConsumptionTests : DbTests
 
         // Get all consumption entries but not the deleted
         var query = new GetConsumptionsQuery();
-        var getHandler = new GetConsumptionsQueryHandler(dbContext, userAccessor);
+        var getHandler = new GetConsumptionsQueryHandler(dbContext);
         var getTask = getHandler.Handle(query, CancellationToken.None);
         task.Wait();
         var result = getTask.Result;

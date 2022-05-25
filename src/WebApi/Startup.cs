@@ -8,7 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nuyken.VeGasCo.Backend.Application;
 using Nuyken.VeGasCo.Backend.Application.Common;
-using Nuyken.VeGasCo.Backend.Domain.Common.Abstractions;
 using Nuyken.VeGasCo.Backend.Domain.Common.Options;
 using Nuyken.VeGasCo.Backend.Infrastructure;
 using Nuyken.VeGasCo.Backend.WebApi.Common;
@@ -43,7 +42,6 @@ public class Startup
 
         services.AddHttpContextAccessor();
         services.AddCors();
-        services.AddTransient<IUserAccessor, UserAccessor>();
         services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
         services.AddHealthChecks();

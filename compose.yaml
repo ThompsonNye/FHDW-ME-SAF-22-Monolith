@@ -1,27 +1,22 @@
 version: '3.8'
 
-networks:
-  vegasco-dev:
-
 volumes:
   vegasco-dev-data:
   vegasco-dev-secure-data:
 
 services:
   app:
-    container_name: vegasco-dev-app
+    container_name: vegasco-app-dev
     build: .
     restart: unless-stopped
     environment:
-      CONNECTION_STRING: "Server=vegasco-dev-db;port=3306;Database=vegasco;User=vegasco;Password=rootPassword;"
+      CONNECTION_STRING: "Server=db;port=3306;Database=vegasco;User=vegasco;Password=vegascoPassword;"
       DATABASE__AUTOMIGRATE: "true"
       DATABASE__TYPE: "mariadb"
       SWAGGER__PUBLISHSWAGGERUI: "true"
       ASPNETCORE_ENVIRONMENT: Development
     volumes:
       - vegasco-dev-secure-data:/root/.aspnet/DataProtection-Keys
-    networks:
-      - vegasco-dev
     ports:
       - "127.0.0.1:8090:80"
     depends_on:
@@ -29,7 +24,7 @@ services:
         condition: service_healthy
         
   db:
-    container_name: vegasco-dev-db
+    container_name: vegasco-db-dev
     image: mariadb:10.7.4-focal
     restart: unless-stopped
     environment:
@@ -37,8 +32,6 @@ services:
       MYSQL_USER: vegasco
       MYSQL_PASSWORD: vegascoPassword
       MYSQL_ROOT_PASSWORD: rootPassword
-    networks:
-      - vegasco-dev
     volumes:
       - vegasco-dev-data:/var/lib/mysql
     ports:

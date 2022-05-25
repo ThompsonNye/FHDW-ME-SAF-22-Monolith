@@ -1,7 +1,9 @@
 using System;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nuyken.VeGasCo.Backend.Application;
 using Nuyken.VeGasCo.Backend.Application.Common;
@@ -18,6 +20,8 @@ public class Program
     {
         try
         {
+            EnsureLogger();
+            
             var host = CreateHostBuilder(args).Build();
 
             var configuration = (host.Services.GetService(typeof(IConfiguration)) as IConfiguration)

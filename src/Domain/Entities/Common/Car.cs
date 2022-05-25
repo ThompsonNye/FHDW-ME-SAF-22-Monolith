@@ -10,11 +10,5 @@ public class Car
 
     public string Name { get; set; }
 
-
     public virtual List<Consumption> Consumptions { get; set; }
-
-
-    public Guid UserId { get; set; }
-
-    [JsonIgnore] public virtual User User { get; set; }
 }
