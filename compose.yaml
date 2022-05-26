@@ -22,7 +22,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-        
+  
   db:
     container_name: vegasco-db-dev
     image: mariadb:10.7.4-focal
