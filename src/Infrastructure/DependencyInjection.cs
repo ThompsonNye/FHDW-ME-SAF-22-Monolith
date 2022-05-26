@@ -12,19 +12,18 @@ namespace Nuyken.VeGasCo.Backend.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services,
+    public static void AddInfrastructure(this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddDbContext(configuration);
         services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
         services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
-
-        return services;
     }
 
     private static void AddDbContext(this IServiceCollection services, IConfiguration configuration)
     {
         if (DbIsMySql(configuration))
+        {
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 var connString = configuration.GetConnectionString(ConfigurationConstants.CONNECTION_STRING_NAME);
@@ -34,8 +33,23 @@ public static class DependencyInjection
                     c.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
                 });
             });
-        else
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("InMemDefault"); });
+            return;
+        }
+
+        if (DbIsPostgres(configuration))
+        {
+            services.AddDbContext<ApplicationDbContext>(options =>
+            {
+                var connString = configuration.GetConnectionString(ConfigurationConstants.CONNECTION_STRING_NAME);
+                options.UseNpgsql(connString, b =>
+                {
+                    b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
+                    b.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
+                });
+            });
+        }
+        
+        services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("InMemDefault"); });
     }
 
     private static bool DbIsMySql(IConfiguration configuration)
@@ -50,5 +64,17 @@ public static class DependencyInjection
         }.Any(x => x.Equals(dbType, StringComparison.InvariantCultureIgnoreCase));
 
         return isMySql;
+    }
+
+    private static bool DbIsPostgres(IConfiguration configuration)
+    {
+        var dbType = configuration[ConfigurationConstants.DATABASE_TYPE];
+        if (dbType is null) return false;
+        var isPostgres = new List<string>
+        {
+            "postgres",
+            "postgresql"
+        }.Any(x => x.Equals(dbType, StringComparison.InvariantCultureIgnoreCase));
+        return isPostgres;
     }
 }

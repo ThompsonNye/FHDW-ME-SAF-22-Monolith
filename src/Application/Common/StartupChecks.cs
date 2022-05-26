@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Nuyken.VeGasCo.Backend.Domain.Common;
@@ -35,10 +36,20 @@ public class StartupChecks
         if (string.IsNullOrEmpty(databaseType)) return;
 
         // Only certain values allowed
-        if (!databaseType.Equals("mariadb", StringComparison.InvariantCultureIgnoreCase) &&
-            !databaseType.Equals("mysql", StringComparison.InvariantCultureIgnoreCase))
-            throw new InvalidOrMissingConfigurationException<string>("Database type", databaseType,
+        var allowed = new[]
+        {
+            "mariadb",
+            "mysql",
+            "postgres",
+            "postgresql"
+        };
+        if (!allowed.Any(x => x.Equals(databaseType, StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new InvalidOrMissingConfigurationException<string>(
+                "Database type",
+                databaseType,
                 InvalidOrMissingConfigurationReason.Invalid);
+        }
     }
 
     /// <summary>
