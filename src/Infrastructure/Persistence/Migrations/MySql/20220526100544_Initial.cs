@@ -1,67 +1,63 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
+namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations.MySql;
 
-namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations.MySql
+public partial class Initial : Migration
 {
-    public partial class Initial : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AlterDatabase()
-                .Annotation("MySql:CharSet", "utf8mb4");
+        migrationBuilder.AlterDatabase()
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "Cars",
-                columns: table => new
+        migrationBuilder.CreateTable(
+                "Cars",
+                table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    Name = table.Column<string>(type: "longtext", nullable: true)
+                    Id = table.Column<Guid>("char(36)", nullable: false, collation: "ascii_general_ci"),
+                    Name = table.Column<string>("longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cars", x => x.Id);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
+                constraints: table => { table.PrimaryKey("PK_Cars", x => x.Id); })
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateTable(
-                name: "Consumptions",
-                columns: table => new
+        migrationBuilder.CreateTable(
+                "Consumptions",
+                table => new
                 {
-                    Id = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci"),
-                    DateTime = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    Distance = table.Column<double>(type: "double", nullable: false),
-                    Amount = table.Column<double>(type: "double", nullable: false),
-                    IgnoreInCalculation = table.Column<bool>(type: "tinyint(1)", nullable: false),
-                    CarId = table.Column<Guid>(type: "char(36)", nullable: false, collation: "ascii_general_ci")
+                    Id = table.Column<Guid>("char(36)", nullable: false, collation: "ascii_general_ci"),
+                    DateTime = table.Column<DateTime>("datetime(6)", nullable: false),
+                    Distance = table.Column<double>("double", nullable: false),
+                    Amount = table.Column<double>("double", nullable: false),
+                    IgnoreInCalculation = table.Column<bool>("tinyint(1)", nullable: false),
+                    CarId = table.Column<Guid>("char(36)", nullable: false, collation: "ascii_general_ci")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Consumptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Consumptions_Cars_CarId",
-                        column: x => x.CarId,
-                        principalTable: "Cars",
-                        principalColumn: "Id",
+                        "FK_Consumptions_Cars_CarId",
+                        x => x.CarId,
+                        "Cars",
+                        "Id",
                         onDelete: ReferentialAction.Cascade);
                 })
-                .Annotation("MySql:CharSet", "utf8mb4");
+            .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Consumptions_CarId",
-                table: "Consumptions",
-                column: "CarId");
-        }
+        migrationBuilder.CreateIndex(
+            "IX_Consumptions_CarId",
+            "Consumptions",
+            "CarId");
+    }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Consumptions");
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(
+            "Consumptions");
 
-            migrationBuilder.DropTable(
-                name: "Cars");
-        }
+        migrationBuilder.DropTable(
+            "Cars");
     }
 }

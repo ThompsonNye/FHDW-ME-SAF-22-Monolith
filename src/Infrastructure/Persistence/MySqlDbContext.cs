@@ -8,7 +8,7 @@ namespace Nuyken.VeGasCo.Backend.Infrastructure.Persistence;
 public class MySqlDbContext : ApplicationDbContext
 {
     private readonly IConfiguration _configuration;
-    
+
     public MySqlDbContext(IConfiguration configuration)
     {
         _configuration = configuration;

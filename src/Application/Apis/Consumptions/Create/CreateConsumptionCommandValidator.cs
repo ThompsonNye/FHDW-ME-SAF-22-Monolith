@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using FluentValidation;
 using Nuyken.VeGasCo.Backend.Application.Common.Abstractions;
 using Nuyken.VeGasCo.Backend.Application.Properties;
@@ -30,7 +29,7 @@ public class CreateConsumptionCommandValidator : AbstractValidator<CreateConsump
         RuleFor(x => x.Distance)
             .GreaterThanOrEqualTo(0)
             .WithMessage(Resources.ErrorMessageValidationPropertyMustBeGreaterOrEqualToZero);
-        
+
         this.dbContext = dbContext;
     }
 }

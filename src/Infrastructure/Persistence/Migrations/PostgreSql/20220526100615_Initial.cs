@@ -1,61 +1,57 @@
-﻿using System;
+﻿#nullable disable
+
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-#nullable disable
+namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations.PostgreSql;
 
-namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations.PostgreSql
+public partial class Initial : Migration
 {
-    public partial class Initial : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.CreateTable(
-                name: "Cars",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cars", x => x.Id);
-                });
+        migrationBuilder.CreateTable(
+            "Cars",
+            table => new
+            {
+                Id = table.Column<Guid>("uuid", nullable: false),
+                Name = table.Column<string>("text", nullable: true)
+            },
+            constraints: table => { table.PrimaryKey("PK_Cars", x => x.Id); });
 
-            migrationBuilder.CreateTable(
-                name: "Consumptions",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DateTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Distance = table.Column<double>(type: "double precision", nullable: false),
-                    Amount = table.Column<double>(type: "double precision", nullable: false),
-                    IgnoreInCalculation = table.Column<bool>(type: "boolean", nullable: false),
-                    CarId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Consumptions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Consumptions_Cars_CarId",
-                        column: x => x.CarId,
-                        principalTable: "Cars",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
+        migrationBuilder.CreateTable(
+            "Consumptions",
+            table => new
+            {
+                Id = table.Column<Guid>("uuid", nullable: false),
+                DateTime = table.Column<DateTime>("timestamp with time zone", nullable: false),
+                Distance = table.Column<double>("double precision", nullable: false),
+                Amount = table.Column<double>("double precision", nullable: false),
+                IgnoreInCalculation = table.Column<bool>("boolean", nullable: false),
+                CarId = table.Column<Guid>("uuid", nullable: false)
+            },
+            constraints: table =>
+            {
+                table.PrimaryKey("PK_Consumptions", x => x.Id);
+                table.ForeignKey(
+                    "FK_Consumptions_Cars_CarId",
+                    x => x.CarId,
+                    "Cars",
+                    "Id",
+                    onDelete: ReferentialAction.Cascade);
+            });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Consumptions_CarId",
-                table: "Consumptions",
-                column: "CarId");
-        }
+        migrationBuilder.CreateIndex(
+            "IX_Consumptions_CarId",
+            "Consumptions",
+            "CarId");
+    }
 
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Consumptions");
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropTable(
+            "Consumptions");
 
-            migrationBuilder.DropTable(
-                name: "Cars");
-        }
+        migrationBuilder.DropTable(
+            "Cars");
     }
 }

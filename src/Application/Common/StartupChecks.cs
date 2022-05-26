@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 using Nuyken.VeGasCo.Backend.Domain.Common;
 using Nuyken.VeGasCo.Backend.Domain.Common.Enums;
 using Nuyken.VeGasCo.Backend.Domain.Common.Exceptions;
-using Nuyken.VeGasCo.Backend.Domain.Common.Options;
 
 namespace Nuyken.VeGasCo.Backend.Application.Common;
 
@@ -44,12 +42,10 @@ public class StartupChecks
             "postgresql"
         };
         if (!allowed.Any(x => x.Equals(databaseType, StringComparison.OrdinalIgnoreCase)))
-        {
             throw new InvalidOrMissingConfigurationException<string>(
                 "Database type",
                 databaseType,
                 InvalidOrMissingConfigurationReason.Invalid);
-        }
     }
 
     /// <summary>

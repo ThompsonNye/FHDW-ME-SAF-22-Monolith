@@ -37,7 +37,7 @@ public class CreateConsumptionCommandHandler : IRequestHandler<CreateConsumption
             DateTime = request.DateTime,
             Distance = request.Distance,
             CarId = request.CarId,
-            IgnoreInCalculation = request.IgnoreInCalculation,
+            IgnoreInCalculation = request.IgnoreInCalculation
         };
         if (request.Id.HasValue)
         {

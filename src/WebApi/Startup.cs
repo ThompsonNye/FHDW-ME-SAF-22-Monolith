@@ -92,9 +92,6 @@ public class Startup
     private static void UseSwagger(IApplicationBuilder app, bool publishUi = false)
     {
         app.UseOpenApi();
-        if (publishUi)
-        {
-            app.UseSwaggerUi3();
-        }
+        if (publishUi) app.UseSwaggerUi3();
     }
 }

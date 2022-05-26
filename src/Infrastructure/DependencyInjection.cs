@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nuyken.VeGasCo.Backend.Application.Common.Abstractions;
@@ -37,7 +35,7 @@ public static class DependencyInjection
                 .AddScoped<IApplicationDbContext>(provider => provider.GetService<PostgresDbContext>());
             return;
         }
-        
+
         services
             .AddDbContext<ApplicationDbContext>()
             .AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());

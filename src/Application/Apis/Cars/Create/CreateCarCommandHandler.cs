@@ -32,7 +32,7 @@ public class CreateCarCommandHandler : IRequestHandler<CreateCarCommand, Car>
         var car = new Car
         {
             Id = request.Id ?? new Guid(),
-            Name = request.Name,
+            Name = request.Name
         };
         if (request.Id.HasValue)
         {

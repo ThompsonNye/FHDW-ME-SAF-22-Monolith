@@ -2,6 +2,4 @@
 
 namespace Nuyken.VeGasCo.Backend.Application.Apis.Info.Version;
 
-public class GetVersionQuery : IRequest<GetVersionInfoResponse>
-{
-}
+public class GetVersionQuery : IRequest<GetVersionInfoResponse> { }

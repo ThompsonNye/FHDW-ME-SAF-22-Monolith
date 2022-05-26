@@ -8,12 +8,12 @@ namespace Nuyken.VeGasCo.Backend.Infrastructure.Persistence;
 public class PostgresDbContext : ApplicationDbContext
 {
     private readonly IConfiguration _configuration;
-    
+
     public PostgresDbContext(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-    
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var connString = _configuration.GetConnectionString(ConfigurationConstants.CONNECTION_STRING_NAME);

@@ -4,11 +4,7 @@ namespace Nuyken.VeGasCo.Backend.Domain.Common.Exceptions;
 
 public class DuplicateEntryException : ApplicationException
 {
-    public DuplicateEntryException()
-    {
-    }
+    public DuplicateEntryException() { }
 
-    public DuplicateEntryException(string message) : base(message)
-    {
-    }
+    public DuplicateEntryException(string message) : base(message) { }
 }

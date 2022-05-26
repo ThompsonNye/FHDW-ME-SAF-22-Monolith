@@ -16,7 +16,7 @@ public class DeleteConsumptionCommandHandler : IRequestHandler<DeleteConsumption
     private readonly IApplicationDbContext dbContext;
     private readonly ILogger<DeleteConsumptionCommandHandler> logger;
 
-    public DeleteConsumptionCommandHandler(IApplicationDbContext dbContext, 
+    public DeleteConsumptionCommandHandler(IApplicationDbContext dbContext,
         ILogger<DeleteConsumptionCommandHandler> logger)
     {
         this.dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));

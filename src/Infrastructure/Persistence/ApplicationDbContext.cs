@@ -35,15 +35,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
                     prop.SetValueConverter(dateTimeConverter);
                     continue;
                 }
-                
-                if (prop.ClrType == typeof(DateTime?))
-                {
-                    prop.SetValueConverter(nullableDateTimeConverter);
-                }
+
+                if (prop.ClrType == typeof(DateTime?)) prop.SetValueConverter(nullableDateTimeConverter);
             }
         }
     }
-    
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

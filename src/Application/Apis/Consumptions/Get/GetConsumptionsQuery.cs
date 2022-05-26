@@ -4,6 +4,4 @@ using Nuyken.VeGasCo.Backend.Domain.Entities.Common;
 
 namespace Nuyken.VeGasCo.Backend.Application.Apis.Consumptions.Get;
 
-public class GetConsumptionsQuery : IRequest<IEnumerable<Consumption>>
-{
-}
+public class GetConsumptionsQuery : IRequest<IEnumerable<Consumption>> { }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Nuyken.VeGasCo.Backend.Domain.Common;
+﻿namespace Nuyken.VeGasCo.Backend.Domain.Common;
 
 public static class ConfigurationConstants
 {

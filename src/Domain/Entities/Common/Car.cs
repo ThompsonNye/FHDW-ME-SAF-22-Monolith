@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json.Serialization;
 
 namespace Nuyken.VeGasCo.Backend.Domain.Entities.Common;
 
