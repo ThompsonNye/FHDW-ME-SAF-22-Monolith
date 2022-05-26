@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations
+namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations.PostgreSql
 {
     public partial class Initial : Migration
     {

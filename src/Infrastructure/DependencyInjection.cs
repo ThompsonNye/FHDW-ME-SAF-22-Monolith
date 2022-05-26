@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +17,6 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services.AddDbContext(configuration);
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
         services.AddScoped<IDatabaseMigrator, DatabaseMigrator>();
     }
 
@@ -24,32 +24,23 @@ public static class DependencyInjection
     {
         if (DbIsMySql(configuration))
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                var connString = configuration.GetConnectionString(ConfigurationConstants.CONNECTION_STRING_NAME);
-                options.UseMySql(connString, ServerVersion.AutoDetect(connString), c =>
-                {
-                    c.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                    c.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
-                });
-            });
+            services
+                .AddDbContext<MySqlDbContext>()
+                .AddScoped<IApplicationDbContext>(provider => provider.GetService<MySqlDbContext>());
             return;
         }
 
         if (DbIsPostgres(configuration))
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-            {
-                var connString = configuration.GetConnectionString(ConfigurationConstants.CONNECTION_STRING_NAME);
-                options.UseNpgsql(connString, b =>
-                {
-                    b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
-                    b.EnableRetryOnFailure(3, TimeSpan.FromSeconds(5), null);
-                });
-            });
+            services
+                .AddDbContext<PostgresDbContext>()
+                .AddScoped<IApplicationDbContext>(provider => provider.GetService<PostgresDbContext>());
+            return;
         }
         
-        services.AddDbContext<ApplicationDbContext>(options => { options.UseInMemoryDatabase("InMemDefault"); });
+        services
+            .AddDbContext<ApplicationDbContext>()
+            .AddScoped<IApplicationDbContext>(provider => provider.GetService<ApplicationDbContext>());
     }
 
     private static bool DbIsMySql(IConfiguration configuration)

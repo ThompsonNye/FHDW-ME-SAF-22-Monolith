@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nuyken.VeGasCo.Backend.Application.Common.Abstractions;
@@ -8,15 +9,9 @@ namespace Nuyken.VeGasCo.Backend.Infrastructure.Persistence;
 
 public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-        : base(options)
-    {
-    }
-
     public DbSet<Consumption> Consumptions { get; set; }
 
     public DbSet<Car> Cars { get; set; }
-
 
     public void EnsureDateTimeKindUTC(ModelBuilder builder)
     {
@@ -34,17 +29,30 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
             if (entityType.IsKeyless) continue;
 
             foreach (var prop in entityType.GetProperties())
+            {
                 if (prop.ClrType == typeof(DateTime))
+                {
                     prop.SetValueConverter(dateTimeConverter);
-                else if (prop.ClrType == typeof(DateTime?)) prop.SetValueConverter(nullableDateTimeConverter);
+                    continue;
+                }
+                
+                if (prop.ClrType == typeof(DateTime?))
+                {
+                    prop.SetValueConverter(nullableDateTimeConverter);
+                }
+            }
         }
     }
-
-
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        
         EnsureDateTimeKindUTC(builder);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        var name = Assembly.GetExecutingAssembly().FullName ?? "InMemDefaultDb";
+        optionsBuilder.UseInMemoryDatabase(name);
     }
 }

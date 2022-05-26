@@ -9,10 +9,10 @@ using Nuyken.VeGasCo.Backend.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations
+namespace Nuyken.Vegasco.Backend.Infrastructure.Persistence.Migrations.PostgreSql
 {
-    [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220526092829_Initial")]
+    [DbContext(typeof(PostgresDbContext))]
+    [Migration("20220526100615_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
