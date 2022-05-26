@@ -6,14 +6,14 @@ Monolithische Anwendung zur Studienarbeit in SAF im Sommersemester '22 an der FH
 
 ### Configuration options
 
-| Option                            | Type   | Description                                                                                                                                                                                                                                                                                         | Required                                            | Default value                                |
-|-----------------------------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------------------|
-| CONNECTION_STRING                 | string | The connection string to the database to use.                                                                                                                                                                                                                                                       | If DATABASE_TYPE is not null, yes                   | null                                         |
-| DATABASE__AUTOMIGRATE             | bool   | Whether or not to automatically apply the available EF migrations on startup.                                                                                                                                                                                                                       | No                                                  | false                                        |
-| DATABASE__TYPE                    | string | What database type is used. Allowed values: null, mysql, mariadb. If null, an in-memory database is used. In case of mysql or mariadb, an appropriate database has to be set up (e.g. via another docker container in the docker-compose) and the connection string provided via CONNECTION_STRING. | No                                                  | null                                         |
-| SWAGGER__DESCRIPTION              | string | The description in the swagger document.                                                                                                                                                                                                                                                            | No                                                  | Backend for the Vehicle Gas Consumption App. |
-| SWAGGER__TITLE                    | string | The title of the swagger document.                                                                                                                                                                                                                                                                  | No                                                  | Vehicle Cas Consumption                      |
-| SWAGGER__PUBLISHSWAGGERUI         | bool   | Whether to publish the Swagger UI besides the swagger.json file                                                                                                                                                                                                                                     | No                                                  | false                                        |
+| Option                            | Type   | Description                                                                                                                                                                                                                                                                                                                              | Required                                            | Default value                                |
+|-----------------------------------|--------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|----------------------------------------------|
+| CONNECTION_STRING                 | string | The connection string to the database to use.                                                                                                                                                                                                                                                                                            | If DATABASE_TYPE is not null, yes                   | null                                         |
+| DATABASE__AUTOMIGRATE             | bool   | Whether or not to automatically apply the available EF migrations on startup.                                                                                                                                                                                                                                                            | No                                                  | false                                        |
+| DATABASE__TYPE                    | string | What database type is used. Allowed values: null, mysql, mariadb, postgres, postgresql. If null, an in-memory database is used. In case of one of the other allowed values, an appropriate database has to be set up (e.g. via another docker container in the docker-compose) and the connection string provided via CONNECTION_STRING. | No                                                  | null                                         |
+| SWAGGER__DESCRIPTION              | string | The description in the swagger document.                                                                                                                                                                                                                                                                                                 | No                                                  | Backend for the Vehicle Gas Consumption App. |
+| SWAGGER__TITLE                    | string | The title of the swagger document.                                                                                                                                                                                                                                                                                                       | No                                                  | Vehicle Cas Consumption                      |
+| SWAGGER__PUBLISHSWAGGERUI         | bool   | Whether to publish the Swagger UI besides the swagger.json file                                                                                                                                                                                                                                                                          | No                                                  | false                                        |
 
 ___Note the double underscore as separator___ _(not in CONNECTION_STRING)____!___
 
@@ -51,6 +51,8 @@ database during startup.
 
 ### Docker
 
+With MariaDB:
+
 ```yaml
 version: '3.8'
 
@@ -64,7 +66,7 @@ volumes:
 services:
   vegasco-db:
     container_name: vegasco-db
-    image: mariadb:10.7.4-focal
+    image: mariadb
     environment:
       MYSQL_DATABASE: vegasco
       MYSQL_USER: vegasco
@@ -82,7 +84,7 @@ services:
 
   vegasco-app:
     container_name: vegasco-app
-    image: vegasco-server
+    image: vegasco-monolith:test
     environment:
       CONNECTION_STRING: <connection string>
       DATABASE__AUTOMIGRATE: "true"
@@ -98,4 +100,34 @@ services:
     depends_on:
       vegasco-db:
         condition: service_healthy
+```
+
+With PostgreSQL:
+
+```yaml
+version: '3.8'
+
+services:
+  app:
+    container_name: vegasco-app-dev
+    image: vegasco-monolith:test
+    restart: unless-stopped
+    environment:
+      CONNECTION_STRING: "Host=db;Port=5432;Database=postgres;Username=postgres;Password=password"
+      DATABASE__AUTOMIGRATE: "true"
+      DATABASE__TYPE: "postgres"
+      SWAGGER__PUBLISHSWAGGERUI: "true"
+    ports:
+      - "127.0.0.1:8080:80"
+    depends_on:
+      - db
+
+  db:
+    container_name: vegasco-db-dev
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: password
+    ports:
+      - "127.0.0.1:5432:5432"
 ```
